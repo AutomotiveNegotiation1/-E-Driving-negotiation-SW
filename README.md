@@ -1,4 +1,6 @@
 # -E-Driving-negotiation-SW
+# 본 폴더는 과학기술정보통신부에서 주관하는 "초고속 V2X 통신기반 자율주행 서비스 기술 개발"과제의 지원으로 구축되었습니다.
+
 Driving Negotiation related SW
 
 2022.04.07 2021년 ETRI 공개산출물 문서 업로드 완료합니다. 
