@@ -9,6 +9,6 @@ Driving Negotiation related SW
  3. 협상프로토콜 전략 설계서 
 #
 
-2022.09.26 ADS App-OBU간 통신을 위한 Socket Sample & 주행협상 Message strucure
+2022.09.26 ADS App-OBU간 통신을 위한 Socket Sample & 주행협상 Message structure
 1. pc_client.c
 2. coopMsg.h
