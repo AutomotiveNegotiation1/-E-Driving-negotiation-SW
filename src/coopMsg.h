@@ -3,7 +3,8 @@
 
 //--------------------------------------------------------
 // ETRI-V2X
-// Update Date : 2022-01-06
+// Update Date : 2022-09-29
+// Update Des  : DMM_EDM Add TmpID 
 // Description : Create Message structure PIM, DMM, DNM
 // Edit by : neuron
 //---------------------------------------------------------
@@ -68,11 +69,11 @@ typedef struct
 typedef enum 
 {
 	STRAIGHT_DRIVE = 1,
-	LANECHANGE_LEFT,
-	LANECHANGE_RIGHT,
-	INTERSECTION_STRAIGHT, 
+	INTERSECTION_STRAIGHT,
 	INTERSECTION_LEFT,
 	INTERSECTion_RIGHT,
+	LANECHANGE_LEFT,
+	LANECHANGE_RIGHT,
 	U_TURN,
 	OVERTAKING
 } Maneuver;
@@ -80,6 +81,7 @@ typedef enum
 typedef struct
 {
 	Msg_Header header;
+	double Tmpid; // BSM-Temporary Id, Sender Vehicle
 	Maneuver ManeuverType;
 	unsigned char RemainDistance;
 
