@@ -4,3 +4,8 @@
  - 2022.09.28
  - upload : src/coopMsg.h 
  - sample negotiation message structure version 0.1
+ 
+#
+ - 2022.09.29
+ - upload : src/coopMsg.h
+ - sample negotiation message structure update DMM_EMM 
