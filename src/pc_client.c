@@ -14,8 +14,9 @@
 #include <pthread.h>
 #include "coopMsg.h"
 
-#define HOSTNAME "192.168.1.6"
+#define HOSTNAME "192.168.1.6" /* OBU IP */
 #define PORT     4200
+#define myPORT   4201
 #define DEBUG_LV 2
 #define BUF_SIZE 1024
 
@@ -28,8 +29,10 @@ typedef enum{
 }DEBUG_MSG_LV;
 
 struct sockaddr_in servaddr;
-static int fd = -1;
+struct sockaddr_in myservaddr;
 
+static int fd = -1;
+static int myfd = -1;
 
 static pthread_t pCmdThread;
 static bool testMenuPrintStatus = true;
@@ -161,7 +164,6 @@ bool Test_App_Main(void)
 	if ((choiceNum > 7) || (choiceNum < 0))
 		return false;
 
-
 	DMM_EDM *t_msg;
 	DNM *t_msg4;
 	PIM *t_msg2;
@@ -186,7 +188,6 @@ bool Test_App_Main(void)
 
 		t_msg2->header.MsgType = 2;
 		t_msg2->header.PacketLen = sizeof(PIM);
-
 		break;
 
 	case 3:
@@ -304,18 +305,21 @@ bool Test_App_Main(void)
 		break;
 	} /*End of switch*/
 	
-	int s_size = t_buf[2];
+	unsigned int s_size = 0;
+	s_size = (unsigned int) ((t_buf[1] << 8) + t_buf[2]);
+	s_size = s_size + sizeof(Msg_Header);
 
 	if(s_size > 0){
 		
-		if ( write(fd, t_buf, s_size) < 0)
+		if ( sendto(fd, t_buf, s_size+1, 0, // +1 to include terminator
+  	             (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0)
 	    	{
 			perror("cannot send message");
 			close(fd);
 			return 0;
 		}
 		else 
-			Debug_Msg_Print(DEBUG_MSG_LV_LOW, "Send V2X Message SET through port %d", PORT);
+			Debug_Msg_Print(DEBUG_MSG_LV_LOW, "Send V2X Message SET through OBU port %d", PORT);
 	} 
 	return rtnVal;
 
@@ -324,18 +328,8 @@ bool Test_App_Main(void)
 void* Cmd_thread_func(void *data)
 {
 	memset(t_buf,0, sizeof(t_buf));	
-   //for first connection from client to server
-	Debug_Msg_Print(DEBUG_MSG_LV_LOW, "Init Message to server");
-	Debug_Msg_Print_Data(DEBUG_MSG_LV_MID, t_buf, sizeof(Msg_Header) );			
-		
-	if (write(fd, t_buf, sizeof(Msg_Header)) < 0)
-    	{
-		perror("cannot send message");
-		//close(fd);
-		//return 0;
-	}
-
-	while (state)
+	
+   	while (state)
 	{
 		/* Test Application call*/
 		if (Test_App_Main() == false)
@@ -355,38 +349,49 @@ int main(void)
     memset(msg, 0, sizeof(msg));
   
     fd = socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+    myfd = socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
 
     if(fd < 0){
         perror("cannot open socket");
         return 0;
     }else 
 	Debug_Msg_Print(DEBUG_MSG_LV_LOW, "open socket");
+	
+    if(fd < 0){
+        perror("cannot open my socket");
+        return 0;
+    }else 
+	Debug_Msg_Print(DEBUG_MSG_LV_LOW, "my open socket");
 
     bzero(&servaddr,sizeof(servaddr));
+    bzero(&servaddr,sizeof(myservaddr));
+	
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = inet_addr(HOSTNAME);
     servaddr.sin_port = htons(PORT);
+
+    myservaddr.sin_family = AF_INET;
+    myservaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    myservaddr.sin_port = htons(myPORT);
     
     int opt_val = 1;
-   
-    connect(fd, (struct sockaddr*) &servaddr, sizeof(servaddr));
-    Debug_Msg_Print(DEBUG_MSG_LV_LOW, "server connect port, %d",PORT);
-
-  //  if (sendto(fd, msg, strlen(msg)+1, 0, // +1 to include terminator
-  //             (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0){
-  /*  if ( write(fd, msg, strlen(msg)) < 0)
+    setsockopt(myfd, SOL_SOCKET, SO_BINDTODEVICE, "eth0", strlen("eth0"));
+	
+    opt_val = bind(myfd, (struct sockaddr *)&myservaddr, sizeof(myservaddr));
+	
+    if (opt_val < 0)
     {
-        perror("cannot send message");
-        close(fd);
-        return 0;
+	printf("UDP: bind( ANY) RX failed\n");
+	close(myfd);
     }
-    else printf("send Hello one through port %d\n", servaddr.sin_port);
-    
-   */
+    else
+    {
+	printf("UDP: bind on RX port %d\n", myPORT);	
+    }
+
     int len, n;
 
-   struct timeval t_val={10, 0}; //sec, msec
-   //SO_RCVTIMEP = 20
+   struct timeval t_val={5, 0}; //sec, msec
     setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &t_val, sizeof(t_val));
 
     int status = 0;
@@ -402,18 +407,16 @@ int main(void)
 
     while(state)
     {
-      	//n = recvfrom(fd, (char*)msg, 10, 0, (struct sockaddr *)&servaddr, &len);
-		n = read(fd, msg, BUF_SIZE);
-		if(n > 0) {
-			Debug_Msg_Print(DEBUG_MSG_LV_LOW, "\n\nread() ===> UDP read n = %d", n);
+      	n = recvfrom(myfd, (char*)msg, 1024, 0, (struct sockaddr *)&myservaddr, &len);
+	if(n > 0) {
+		Debug_Msg_Print(DEBUG_MSG_LV_LOW, "\n\nread() ===> UDP read n = %d", n);
         }
-			
-	usleep(5000);
     }
     
     pthread_join(pCmdThread, (void **)&status);
     Debug_Msg_Print(DEBUG_MSG_LV_LOW, "ByeBye");
 
     close(fd);
+    close(myfd);
     return 0;
 }
