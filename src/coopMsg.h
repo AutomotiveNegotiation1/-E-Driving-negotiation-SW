@@ -81,7 +81,7 @@ typedef enum
 typedef struct
 {
 	Msg_Header header;
-	double Tmpid; // BSM-Temporary Id, Sender Vehicle
+	unsigned int Tmpid; // BSM-Temporary Id, Sender Vehicle
 	Maneuver ManeuverType;
 	unsigned char RemainDistance;
 
