@@ -9,3 +9,7 @@
  - 2022.09.29
  - upload : src/coopMsg.h
  - sample negotiation message structure update DMM_EMM 
+#
+ - 2022.10.04
+ - update : src/pc_client.c
+ - Add socket OBU to myApp direction.
