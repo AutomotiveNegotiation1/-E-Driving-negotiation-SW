@@ -392,7 +392,7 @@ int main(void)
     int len, n;
 
    struct timeval t_val={5, 0}; //sec, msec
-    setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &t_val, sizeof(t_val));
+    setsockopt(myfd, SOL_SOCKET, SO_RCVTIMEO, &t_val, sizeof(t_val));
 
     int status = 0;
     int thr_rc = 0;
