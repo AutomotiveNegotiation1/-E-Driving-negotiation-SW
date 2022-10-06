@@ -1,5 +1,6 @@
 # 2022.09.26
  - upload : src/pc_client.c 2022.04.24 version 0.1
+ - sample socket program(PC_App)
 #
  - 2022.09.28
  - upload : src/coopMsg.h 
