@@ -9,7 +9,7 @@
 #
  - 2022.09.29
  - upload : src/coopMsg.h
- - sample negotiation message structure update DMM_EM 
+ - sample negotiation message structure update DMM_EDM 
 #
  - 2022.10.04
  - update : src/pc_client.c
