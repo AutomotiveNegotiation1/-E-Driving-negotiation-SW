@@ -11,3 +11,8 @@ Get/Set Command for Auto car
 1. Run / Stop
 2. Remote / Status / Scenario / Config 
 
+#
+1. function_utils 
+  - generate_speed & queue full_append, get(return a list of newest items)
+2. config_utils
+  - read_device_config
