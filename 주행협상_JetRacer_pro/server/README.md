@@ -16,3 +16,7 @@ Get/Set Command for Auto car
   - generate_speed & queue full_append, get(return a list of newest items)
 2. config_utils
   - read_device_config
+3. log file
+  - LOG_FILE_PATH = "/var/tmp/auto-car/auto-car-log"
+
+#
