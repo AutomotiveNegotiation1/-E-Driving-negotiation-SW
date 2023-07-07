@@ -8,7 +8,8 @@ Driving Negotiation related SW
  2. 협상주행을 위한 자율주행시스템 설계서
  3. 협상프로토콜 전략 설계서 
 #
-
 2022년 ETRI 공개산출물(SW)은 다음과 같습니다.
  1. 주행협상_JetRacer_pro/car
  2. 주행협상_JetRacer_pro/server
+#
+2023년 ETRI 공개산출물(SW)
