@@ -1,4 +1,5 @@
 # 2022.11 
+이 프로젝트는 모형차 환경에서 자율협력주행 기능검증을 위해 개발한 SW입니다
  - JetRacer_pro/car
  - CAR Model : JetRacer Pro AI Kit by Jetson Nano
  - Communications : WIFI
