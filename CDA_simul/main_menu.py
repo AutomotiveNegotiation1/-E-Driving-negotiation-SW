@@ -326,9 +326,9 @@ class MainMenu(Entity):
         self.case = 0
         self.ads_speed = 0
 
-        # 차량용 UI 단말 소켓
-        self.ui_client = socket(AF_INET, SOCK_DGRAM)
-        self.ui_port = ("192.168.1.203", 63011)
+        # 차량용 UI 단말 소켓 - Object.py 에서 소켓연결 설정, 330-331 line delete
+        # self.ui_client = socket(AF_INET, SOCK_DGRAM)
+        # self.ui_port = ("192.168.1.203", 63011)
 
         # PYQT 통신 로그 통신
         self.qt_log_server = socket(AF_INET, SOCK_DGRAM)
