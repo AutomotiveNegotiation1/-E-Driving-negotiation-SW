@@ -34,7 +34,7 @@ msg = 0
 
 ads_ip ="localhost"  #192.168.1.100, 자율주행 차량 SW IP, 동일 IP 구성 필요
 ui_ip = "localhost" #192.168.1.203
-my_ip = "localhost"  #192.168.1.202
+my_ip = "localhost"  #192.168.1.202 #31252 server port
 
 class ADS(Entity):
     """ ADS connection and Send/Receive Data """
