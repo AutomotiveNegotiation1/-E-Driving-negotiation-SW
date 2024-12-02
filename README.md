@@ -17,4 +17,7 @@ Driving Negotiation related SW
 #
 1차년도~3차년도 논문 결과물 업로드합니다. (2023-11) <br>
 - Reference로 활용가능합니다.
-  
+#
+2024sus ETRI 연구데이터는 다음과 같습니다.
+ 1. 인천 로봇랜드 TB 주행협상 처리시간
+ 2. 화성 K-city 주행협상 처리시간
